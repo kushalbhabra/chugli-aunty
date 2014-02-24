@@ -1,0 +1,4 @@
+cron:
+- description: send email
+  url: /
+  schedule: every 2 days
