@@ -14,6 +14,8 @@ def preprocessing(Subject):
                 return False
        
         Query = {}
+        
+# Sample Query: get ai 688 quiz 2009
         if len(pQuery) == 4:
                 
                 try:
@@ -44,25 +46,14 @@ def preprocessing(Subject):
         return Query
 
 
-# Method 
-def method(Query):
-        method = Query['method'] 
-        
-        if method == "get":
-                pass
-        elif method == "put":
-                pass
-        else:
-                print "Invalid method"
-                return False
-        return True
-
 # Subject & Number | Exam | Year
 def get_paper(Query):
         pass
 
-sub = "  get ai688 midsem 08 " 
-print preprocessing(sub)
+if __name__ == "__main__":
+	sub = "  get ai688 midsem 08 " 
+	print "query", sub
+	print preprocessing(sub)
 
 # Easter Eggs
 

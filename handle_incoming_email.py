@@ -10,15 +10,54 @@ from google.appengine.api import files
 from google.appengine.ext import blobstore
 from google.appengine.ext import ndb
 from auntymodel import Paper
-
-
+from SCL import *
 
 class LogSenderHandler(InboundMailHandler):
     def receive(self, mail_message):
         logging.info("================================")
         logging.info("Received a mail_message from: " + mail_message.sender)
-        logging.info("The email subject: " + mail_message.subject)
+        logging.info("my email subject " + mail_message.subject)
+        
+        #logging.info("PREPROCESSED DATA: " + str(preprocessing(mail_message.subject)))
+        
+        self.Query = preprocessing(mail_message.subject)
+        
+        if self.Query["method"] == "get":
+                logging.info("using get method")
+        elif self.Query["method"] == "put":
+                logging.info("using put method")
+                self.put(self.Query, mail_message)
+        else:
+                logging.info("something chutiya method")
+        
+    def put(self, query, mail_message):
+        
+        if not hasattr(mail_message, 'attachments'):
+            return
+        else:
+            logging.info("Number of Attachment(s) %i " % len(mail_message.attachments))
+        
+        filename = ''
+        for attach in mail_message.attachments:
+            filename = attach[0]
+            contents = attach[1]
+        
+        self.pdf_name = query["subject"]+"_"+query["number"]+"_"+query["exam"]+"_"+query["year"]
 
+        file_name = files.blobstore.create(mime_type = "application/pdf", _blobinfo_uploaded_filename= self.pdf_name+".pdf")
+           
+        logging.info("PDF FILE name"+ self.pdf_name)
+        logging.info("written")
+
+        # Open the file and write to it
+        with files.open(file_name, 'a') as f:
+            f.write(contents.decode())
+
+        # Finalize the file. Do this before attempting to read it.
+        files.finalize(file_name)
+
+
+        '''
         if not hasattr(mail_message, 'attachments'):
             return
             #raise ProcessingFailedError('Email had no attached documents')
@@ -51,7 +90,7 @@ class LogSenderHandler(InboundMailHandler):
         paper.uploaded_by = mail_message.sender
         paper.blob_key = blob_key
         paper.put()
-        '''
+        
         try:
             logging.info( "BLOB KEY:" )
             logging.info( blob_key )
@@ -69,7 +108,7 @@ class LogSenderHandler(InboundMailHandler):
               body="",
               attachments=[(blob_info.filename, value)]
         )
-        '''
+        
         papers = Paper.query(Paper.subject == mail_message.subject)
         for p in papers:                
             try:
@@ -89,7 +128,7 @@ class LogSenderHandler(InboundMailHandler):
                   body="Hi, <br />PFA. <br /><br /> Regards, Aunty",
                   attachments=[(p.subject, value)]
             )
-                                                           
+           '''                                                
 
 app = webapp.WSGIApplication([LogSenderHandler.mapping()], debug=True)
 wsgiref.handlers.CGIHandler().run(app)
