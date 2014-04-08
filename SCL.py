@@ -52,8 +52,12 @@ def get_paper(Query):
 
 if __name__ == "__main__":
 	sub = "  get ai688 midsem 08 " 
+	sub_asterisk = " get ai688 midsem *"
 	print "query", sub
 	print preprocessing(sub)
+	
+	print "query-with-asterisk", sub_asterisk
+	print preprocessing(sub_asterisk)
 
 # Easter Eggs
 
