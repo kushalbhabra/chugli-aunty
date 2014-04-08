@@ -37,9 +37,15 @@ class MainHandler(webapp2.RequestHandler):
   def get(self):
     upload_url = blobstore.create_upload_url('/upload')
     self.response.out.write('<html><body>')
+    self.response.out.write('<center><h2>Chugli Aunty ; )</h2>')
+    self.response.out.write('<p>get and put email here: <strong>help@chugliaunty.appspotmail.com</strong></p></center>')
+    self.response.out.write('</body></html>')
+    '''
+    self.response.out.write('<html><body>')
     self.response.out.write('<form action="%s" method="POST" enctype="multipart/form-data">' % upload_url)
     self.response.out.write("""Upload File: <input type="file" name="file"><br> <input type="submit"
         name="submit" value="Submit"> </form></body></html>""")
+    '''
 
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
   def post(self):
