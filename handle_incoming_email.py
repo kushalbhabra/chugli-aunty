@@ -59,9 +59,17 @@ class LogSenderHandler(InboundMailHandler):
 		self.failed_query(mail_message)
 		
     def put(self, query, mail_message):
-    
-        self.look_up = LookUp()
+    	
+	"""
+	## ACCESS Control in uploading papers
+	
+	self.privileged_uploaders = ["privileged@uploader1.com", "privileged_uploader2@gmail.com"]
+	if str(mail_message.sender in self.privileged_uploaders:
+		# Indent all put() code below
+	"""
 
+        self.look_up = LookUp()
+	
         if not hasattr(mail_message, 'attachments'):
             return
         else:
@@ -114,9 +122,7 @@ class LogSenderHandler(InboundMailHandler):
 	logging.info("FILE NAME "+self.name)
 
         self.lookup = LookUp.all()
-	
-	logging.info(query["year"])
-	
+	self.valid_query = False
 
 	## Querying
 	if query["year"] == "*":
@@ -124,20 +130,30 @@ class LogSenderHandler(InboundMailHandler):
 	else:
         	self.files_list = self.lookup.filter("FileName =", self.name)
 	
+
 	##  TO Add if files_list is empty then email "FILE NOT FOUND" message
 	for  self.pdf_file in self.files_list.run():
+		self.valid_query = True
+
 		logging.info("Got PDF FILE_named " + str(self.pdf_file.FileName))
 	
 		self.blob_info = blobstore.BlobInfo.get(self.pdf_file.BlobKey.key())
         	self.blob_reader = blobstore.BlobReader(self.pdf_file.BlobKey.key())
-       		
 	        self.value = self.blob_reader.read()
                     
 		mail.send_mail(sender="chugliaunty@gmail.com",
                 	to=mail_message.sender,
                 	subject=mail_message.subject,
-                	body="Hi, I hope you got what you were looking for, Regards, Aunty",
+                	body="Hi Maggu, check attachments. I hope you got what you were looking for...     Regards, Aunty",
                 	attachments=[(self.blob_info.filename, self.value)]
+		)
+	
+	if not self.valid_query:
+		mail.send_mail(sender="chugliaunty@gmail.com",
+                	to=mail_message.sender,
+                	subject=mail_message.subject,
+                	body="Sorry, couldn't find any papers by Subject/Code: %s-%s for %s year 20%s      \
+				Regards, Aunty" %(query["subject"], query["number"], query["exam"], query["year"])
 		)
  
         #### PUT the values in EmailDB datastore
@@ -151,7 +167,7 @@ class LogSenderHandler(InboundMailHandler):
 	mail.send_mail(sender="chugliaunty@gmail.com",
 		to=mail_message.sender,
 		subject="Nahi Chamka!",
-		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. Try something like this: get AI688 midsem 09 to AI688 2009 paper."  %str(mail_message.subject)
+		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. Try something like this as subject: get AI688 midsem 09 to get AI 688 2009 paper."  %str(mail_message.subject)
 	)
 
 
