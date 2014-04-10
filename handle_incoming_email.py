@@ -76,14 +76,18 @@ class LogSenderHandler(InboundMailHandler):
 	logging.info("FILE NAME "+self.name)
 
         self.lookup = LookUp.all()
-	self.valid_query = False
+	self.files_list = self.lookup.filter("Subject =", query["subject"]).filter("Number =", query["number"])
 
-	## Querying
-	if query["year"] == "*":
-		self.files_list = self.lookup.filter("Subject =", query["subject"]).filter("Number =", query["number"]).filter("Exam =", query["exam"])
-	else:
-        	self.files_list = self.lookup.filter("FileName =", self.name)
-        	
+	# Can somebody write an one-liner elegant GQL query for this?
+	if query["year"] != "*":
+		self.files_list = self.files_list.filter("Year =", query["year"])
+	if query["exam"] != "*":
+		self.files_list = self.files_list.filter("Exam =", query["exam"])
+
+	## Check for somebody attempting to do a lame wildcard-search
+	if query["subject"] == "*" or query["number"] == "*":
+		self.lame_wildcard_search(mail_message)
+       	
         return self.files_list
 
     def put(self, query, mail_message):
@@ -152,7 +156,8 @@ class LogSenderHandler(InboundMailHandler):
                         mail.send_mail(sender="chugliaunty@gmail.com",
                                 to=mail_message.sender,
                                 subject=mail_message.subject,
-                                body="Hi Maggu, check attachments. I hope you got what you were looking for...     Regards, Aunty",
+                                body="Hi Maggu, check attachments. I hope you got what you were looking for...    \
+				Regards, Aunty",
                                 attachments=[(self.blob_info.filename, self.value)]
                         )
 	
@@ -204,6 +209,15 @@ class LogSenderHandler(InboundMailHandler):
                 	body="Sorry, couldn't find any papers by Subject/Code: %s-%s for %s year 20%s      \
 				Regards, Aunty" %(query["subject"], query["number"], query["exam"], query["year"])
 		)
+
+    def lame_wildcard_search(self, mail_message):
+    	    mail.send_mail(sender="chugliaunty@gmail.com",
+                	to=mail_message.sender,
+                	subject="LAME!",
+                	body="Either you were trying to access all records/papers in database or you have difficulty writing in SCL. If it's later, why not check http://chugliaunty.appspot.com ?     \
+				Regards, Aunty"
+		)
+
 
 
 app = webapp.WSGIApplication([LogSenderHandler.mapping()], debug=True)
