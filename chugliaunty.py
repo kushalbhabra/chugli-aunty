@@ -59,6 +59,14 @@ class MainHandler(webapp2.RequestHandler):
     				<br>\
     Similary you can use <b>list</b> command in place \"get\" to get a list of relevant papers.\
     <br><br>\
+	\
+    To upload a paper(since this service is crowd-sourced) simply <b>attach</b> the pdf file in email and type the subject as\
+\
+    put subject course_no exam_type year<br>\
+\
+    For ex. to upload artificial intelligence, course number 668 midsem 2013 ka paper<br>\
+\
+    <i>put ai 668 midsem 13 </i><br><br>\
 					\
     <h3>Nice! Who made this? Why?</h3>\
     Do you have time to read this section? Maggna shuru karo.. <br><br><br>\
