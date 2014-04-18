@@ -101,14 +101,18 @@ class LogSenderHandler(InboundMailHandler):
         
         attachment_filename = ''
         for attach in mail_message.attachments:
-            attachment_filename = attach[0]
-            contents = attach[1]
+            attachment_filename = str(attach[0])
+	    contents = attach[1]
         
 
 	self.pdf_name = self.construct_name(query)
+	
+	if attachment_filename.split(".")[-1] == 'pdf':
+	        file_name = files.blobstore.create(mime_type = "application/pdf", _blobinfo_uploaded_filename= self.pdf_name+".pdf")
+	else :
+	        file_name = files.blobstore.create(mime_type = "application/octet-stream", _blobinfo_uploaded_filename= self.pdf_name+"."+ attachment_filename.split(".")[-1] )
 
-        file_name = files.blobstore.create(mime_type = "application/pdf", _blobinfo_uploaded_filename= self.pdf_name+".pdf")
-           
+
         logging.info("PDF FILE name"+ self.pdf_name)
         logging.info("written" + str(file_name))
 
