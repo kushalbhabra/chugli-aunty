@@ -12,6 +12,7 @@ from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 from google.appengine.api import files
 from google.appengine.ext import blobstore
 from google.appengine.ext import ndb
+from google.appengine.runtime import apiproxy_errors
 from EmailModel import *
 from auntymodel import Paper
 from SCL import *
@@ -149,6 +150,7 @@ class LogSenderHandler(InboundMailHandler):
 		
 	#One or more files found
 	else:
+                self.attachedPapers = []
                 for  self.pdf_file in self.files_list.run():
 
                         logging.info("Got PDF FILE_named " + str(self.pdf_file.FileName))
@@ -156,15 +158,21 @@ class LogSenderHandler(InboundMailHandler):
                         self.blob_info = blobstore.BlobInfo.get(self.pdf_file.BlobKey.key())
                         self.blob_reader = blobstore.BlobReader(self.pdf_file.BlobKey.key())
                         self.value = self.blob_reader.read()
-                            
+                        self.attachedPapers.append((self.blob_info.filename, self.value))
+                try:
                         mail.send_mail(sender="chugliaunty@gmail.com",
-                                to=mail_message.sender,
-                                subject=mail_message.subject,
-                                body="Hi Maggu, check attachments. I hope you got what you were looking for...    \
-				Regards, Aunty",
-                                attachments=[(self.blob_info.filename, self.value)]
-                        )
-	
+                                        to=mail_message.sender,
+                                        subject=mail_message.subject,
+                                        body="Hi Maggu, check attachments. I hope you got what you were looking for...    \
+                                        Regards, Aunty",
+                                        attachments=self.attachedPapers
+                                )
+                except apiproxy_errors.OverQuotaError, message:
+                        mail.send_mail(sender="chugliaunty@gmail.com",
+                                                to=mail_message.sender,
+                                                subject=mail_message.subject,
+                                                body="Hi Maggu,\n Unfortunately my qouta for attachments for today is over. I am telling aditya idiot to extend  my qouta as soon as possible. \n \n Regards,Aunty "
+                                        )
     
     def get_list(self, query, mail_message):
 
