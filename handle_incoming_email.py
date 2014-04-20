@@ -210,7 +210,7 @@ class LogSenderHandler(InboundMailHandler):
 	mail.send_mail(sender="chugliaunty@gmail.com",
 		to=mail_message.sender,
 		subject="Nahi Chamka!",
-		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. Try something like this as subject: get AI688 midsem 09 to get AI 688 2009 paper."  %str(mail_message.subject)
+		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. Try something like this as subject: get AI688 midsem 09 to get AI 688 2009 paper. You can ALSO use asterisks in your chugli: For ex: get cl 455 * *  to get all quiz/endsem/midsem of all years of course 455"  %str(mail_message.subject)
 	)
 	
     # When no files are found, mail relevant message.
