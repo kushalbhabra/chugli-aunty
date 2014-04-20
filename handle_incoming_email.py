@@ -39,13 +39,16 @@ class LogSenderHandler(InboundMailHandler):
             
         #Logging email details in datastore
  	self.email_db = Emaildb()
-    	self.email_db.subject = mail_message.subject
-	self.email_db.emailer = mail_message.sender
-	self.email_db.put()
-        logging.info("================================")
-        logging.info("Received a mail_message from: " + mail_message.sender)
-        logging.info("my email subject " + mail_message.subject)
-        
+    	try: 
+		self.email_db.subject = mail_message.subject
+		self.email_db.emailer = mail_message.sender
+		self.email_db.put()
+		logging.info("================================")
+		logging.info("Received a mail_message from: " + mail_message.sender)
+		logging.info("my email subject " + mail_message.subject)
+	except:
+		# Handles blank subject email
+		pass
         
         #Calling get(), put() or get_list() depending on method of query
         if preprocessing(mail_message.subject):
