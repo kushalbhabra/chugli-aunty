@@ -73,6 +73,7 @@ class LogSenderHandler(InboundMailHandler):
 			self.failed_query(mail_message, self.Query)
 	except:
 		logging.info(" Caught exception, farting it out")
+		self.failed_query(mail_message, self.Query)
 		# Handles blank subject email
 		pass
         
@@ -210,7 +211,7 @@ class LogSenderHandler(InboundMailHandler):
 	self.email_db.put()
  
     ## When query parsing fails
-    def failed_query(self, mail_message, ):
+    def failed_query(self, mail_message, query):
 
 	mail.send_mail(sender="chugliaunty@gmail.com",
 		to=mail_message.sender,

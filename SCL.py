@@ -29,7 +29,13 @@ def preprocessing(Subject):
                         Query['year'] = pQuery[3]
                 except: 
                         print "Couldn't parse Subject properly | len(pQuery) == 4"
-                        return False
+			
+			## Experimental
+			Query['method'] = pQuery[0]
+			Query['subject'] = pQuery[1]
+			Query['number'] = pQuery[2]
+
+                        return Query
         elif len(pQuery) == 5:
                 try:
                         Query['method'] = pQuery[0]
@@ -53,11 +59,13 @@ def get_paper(Query):
 if __name__ == "__main__":
 	sub = "  get ai688 midsem 08 " 
 	sub_asterisk = " get ai688 midsem *"
+	exp = " get cl 356 endsem"
 	print "query", sub
 	print preprocessing(sub)
 	
 	print "query-with-asterisk", sub_asterisk
 	print preprocessing(sub_asterisk)
-
+	
+	print "Exp feature", preprocessing(exp)
 # Easter Eggs
 
