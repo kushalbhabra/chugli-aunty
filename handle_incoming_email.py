@@ -46,35 +46,37 @@ class LogSenderHandler(InboundMailHandler):
 		logging.info("================================")
 		logging.info("Received a mail_message from: " + mail_message.sender)
 		logging.info("my email subject " + mail_message.subject)
+
+        #Calling get(), put() or get_list() depending on method of query
+		if preprocessing(mail_message.subject):
+
+			self.Query = preprocessing(mail_message.subject)
+			if self.Query["method"] == "get":
+				logging.info("Method: get")
+				self.get(self.Query, mail_message)
+
+			elif self.Query["method"] == "put":
+				logging.info("Method: put")
+				"""
+					Check for put privilege here
+				"""
+				self.put(self.Query, mail_message)
+				
+			elif self.Query["method"] == "list":
+				logging.info("Method: get_list")
+				self.get_list(self.Query, mail_message)
+
+			else:
+				logging.info("some chutiya method")
+		else:
+			## preprocessing returns False on garbage query
+			self.failed_query(mail_message, self.Query)
 	except:
+		logging.info(" Caught exception, farting it out")
 		# Handles blank subject email
 		pass
         
-        #Calling get(), put() or get_list() depending on method of query
-        if preprocessing(mail_message.subject):
-
-        	self.Query = preprocessing(mail_message.subject)
-		if self.Query["method"] == "get":
-			logging.info("Method: get")
-			self.get(self.Query, mail_message)
-
-		elif self.Query["method"] == "put":
-			logging.info("Method: put")
-			"""
-                                Check for put privilege here
-                        """
-			self.put(self.Query, mail_message)
 			
-		elif self.Query["method"] == "list":
-			logging.info("Method: get_list")
-			self.get_list(self.Query, mail_message)
-
-		else:
-			logging.info("some chutiya method")
-	else:
-		## preprocessing returns False on garbage query
-		self.failed_query(mail_message)
-		
     def search(self,query,mail_message):
         self.name = self.construct_name(query)
 	logging.info("FILE NAME "+self.name)
@@ -208,12 +210,12 @@ class LogSenderHandler(InboundMailHandler):
 	self.email_db.put()
  
     ## When query parsing fails
-    def failed_query(self, mail_message):
+    def failed_query(self, mail_message, ):
 
 	mail.send_mail(sender="chugliaunty@gmail.com",
 		to=mail_message.sender,
 		subject="Nahi Chamka!",
-		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. Try something like this as subject: get AI688 midsem 09 to get AI 688 2009 paper. You can ALSO use asterisks in your chugli: For ex: get cl 455 * *  to get all quiz/endsem/midsem of all years of course 455"  %str(mail_message.subject)
+		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. You can ALSO use asterisks in your chugli, keep SPACES inbetween, [Experimental Auto-correction Feature]: Copy-paste this as your subject %s "  %(str(mail_message.subject), str("get "+ query['subject']+' '+query['number']+' '+"*"+' '+"*" ))
 	)
 	
     # When no files are found, mail relevant message.
