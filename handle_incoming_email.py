@@ -218,7 +218,7 @@ class LogSenderHandler(InboundMailHandler):
 	mail.send_mail(sender="chugliaunty@gmail.com",
 		to=mail_message.sender,
 		subject="Nahi Chamka!",
-		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. You can ALSO use asterisks in your chugli, keep SPACES inbetween,  [BETA Auto-correction Feature]: Copy-paste this as your subject: %s                              CHECK http://chugliaunty.appspot.com on how to construct query,              Regards, Aunty"  %(str(mail_message.subject), str("get "+ query['subject']+' '+query['number']+' '+"*"+' '+"*" )),
+		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. You can ALSO use asterisks in your chugli, keep SPACES inbetween,  [BETA Auto-suggestion Feature]: Copy-paste this as your subject: %s                              CHECK http://chugliaunty.appspot.com on how to construct query,              Regards, Aunty"  %(str(mail_message.subject), str("get "+ query['subject']+' '+query['number']+' '+"*"+' '+"*" )),
 		html="Sorry! could'nt understand Chuglimail with <b>Subject</b>: %s. <br><br>You can ALSO use asterisks in your chugli, keep SPACES inbetween, <br><br>[BETA Auto-correction Feature]: <b>Copy-paste this as your subject: %s </b> <br><br> CHECK http://chugliaunty.appspot.com on how to construct query, <br><br> Regards, Aunty"  %(str(mail_message.subject), str("get "+ query['subject']+' '+query['number']+' '+"*"+' '+"*" ))
 	)
 	
