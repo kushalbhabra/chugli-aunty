@@ -171,13 +171,15 @@ class LogSenderHandler(InboundMailHandler):
                                         subject=mail_message.subject,
                                         body="Hi Maggu, check attachments. I hope you got what you were looking for...    \
                                         Regards, Aunty",
+                                        html="Hi Maggu, <b>check attachments</b>.<br> I hope you got what you were looking for...    \
+					<br><br>Regards,<br> Aunty",
                                         attachments=self.attachedPapers
                                 )
                 except apiproxy_errors.OverQuotaError, message:
                         mail.send_mail(sender="chugliaunty@gmail.com",
                                                 to=mail_message.sender,
                                                 subject=mail_message.subject,
-                                                body="Hi Maggu,\n Unfortunately my qouta for attachments for today is over. I am telling aditya idiot to extend  my qouta as soon as possible. \n \n Regards,Aunty "
+                                                body="Hi Maggu, Unfortunately my qouta for attachments for today is over. I am telling aditya idiot to extend  my qouta as soon as possible. \n \n Regards,Aunty "
                                         )
     
     def get_list(self, query, mail_message):
@@ -216,7 +218,8 @@ class LogSenderHandler(InboundMailHandler):
 	mail.send_mail(sender="chugliaunty@gmail.com",
 		to=mail_message.sender,
 		subject="Nahi Chamka!",
-		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. You can ALSO use asterisks in your chugli, keep SPACES inbetween, ###[Experimental Auto-correction Feature]: Copy-paste this as your subject: %s ###                       CHECK http://chugliaunty.appspot.com on how to construct query,              Regards, Aunty"  %(str(mail_message.subject), str("get "+ query['subject']+' '+query['number']+' '+"*"+' '+"*" ))
+		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. You can ALSO use asterisks in your chugli, keep SPACES inbetween,  [BETA Auto-correction Feature]: Copy-paste this as your subject: %s                              CHECK http://chugliaunty.appspot.com on how to construct query,              Regards, Aunty"  %(str(mail_message.subject), str("get "+ query['subject']+' '+query['number']+' '+"*"+' '+"*" )),
+		html="Sorry! could'nt understand Chuglimail with <b>Subject</b>: %s. <br><br>You can ALSO use asterisks in your chugli, keep SPACES inbetween, <br><br>[BETA Auto-correction Feature]: <b>Copy-paste this as your subject: %s </b> <br><br> CHECK http://chugliaunty.appspot.com on how to construct query, <br><br> Regards, Aunty"  %(str(mail_message.subject), str("get "+ query['subject']+' '+query['number']+' '+"*"+' '+"*" ))
 	)
 	
     # When no files are found, mail relevant message.
@@ -224,7 +227,9 @@ class LogSenderHandler(InboundMailHandler):
             mail.send_mail(sender="chugliaunty@gmail.com",
                 	to=mail_message.sender,
                 	subject=mail_message.subject,
-                	body="Sorry, couldn't find any papers by Subject/Code: %s-%s for %s year 20%s      \
+                 	html="Sorry, couldn't find any papers by <b>Subject/Code: %s-%s for %s year 20%s </b>     \
+				<br><br>Regards,<br> Aunty" %(query["subject"], query["number"], query["exam"], query["year"]),
+		       	body="Sorry, couldn't find any papers by Subject/Code: %s-%s for %s year 20%s      \
 				Regards, Aunty" %(query["subject"], query["number"], query["exam"], query["year"])
 		)
 
