@@ -216,7 +216,7 @@ class LogSenderHandler(InboundMailHandler):
 	mail.send_mail(sender="chugliaunty@gmail.com",
 		to=mail_message.sender,
 		subject="Nahi Chamka!",
-		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. You can ALSO use asterisks in your chugli, keep SPACES inbetween, [Experimental Auto-correction Feature]: Copy-paste this as your subject %s "  %(str(mail_message.subject), str("get "+ query['subject']+' '+query['number']+' '+"*"+' '+"*" ))
+		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. You can ALSO use asterisks in your chugli, keep SPACES inbetween, ###[Experimental Auto-correction Feature]: Copy-paste this as your subject: %s ###                       CHECK http://chugliaunty.appspot.com on how to construct query,              Regards, Aunty"  %(str(mail_message.subject), str("get "+ query['subject']+' '+query['number']+' '+"*"+' '+"*" ))
 	)
 	
     # When no files are found, mail relevant message.
