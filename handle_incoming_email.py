@@ -71,8 +71,8 @@ class LogSenderHandler(InboundMailHandler):
 				mail.send_mail(sender="chugliaunty@gmail.com",
 					to=mail_message.sender,
 					subject="dicendum, quod est sensibile",
-					body= "Didn't understand the subject(of email)? Neither did we... Please type a valid query like: get cl 455 endsem 13  | Why not check chugliaunty.appspot.com to know more?          Regards, Aunty",
-					html= "Didn't understand the subject(of email)? Neither did we...<br><br>Please type a valid query like: <b>get cl 455 endsem 13</b><br><br> Why not check chugliaunty.appspot.com to know more? <br><br>Regards,<br>Aunty")
+					body= "Didn't understand the subject(of email)? Neither did I... Please type a valid query like: get cl 455 endsem 13  | Why not check chugliaunty.appspot.com to know more?          Regards, Aunty",
+					html= "Didn't understand the subject(of email)? Neither did I...<br><br>Please type a valid query like: <b>get cl 455 endsem 13</b><br><br> Why not check chugliaunty.appspot.com to know more? <br><br>Regards,<br>Aunty")
 		#
 		else:
 			## preprocessing returns False on garbage query
