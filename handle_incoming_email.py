@@ -79,11 +79,15 @@ class LogSenderHandler(InboundMailHandler):
 			self.failed_query(mail_message, self.Query)
 	except:
 		logging.info(" Caught exception, farting it out")
+		self.failed_query(mail_message, self.Query)
+		
+		'''
 		mail.send_mail(sender="chugliaunty@gmail.com",
 			to=mail_message.sender,
 			subject="dicendum, quod est sensibile",
 			body= "Didn't understand the subject(of email)? Neither did we... Please type a valid query like: get cl 455 endsem 13  | Why not check chugliaunty.appspot.com to know more?          Regards, Aunty",
 			html= "Didn't understand the subject(of email)? Neither did we...<br><br>Please type a valid query like: <b>get cl 455 endsem 13</b><br><br> Why not check chugliaunty.appspot.com to know more? <br><br>Regards,<br>Aunty")
+		'''
 		# Handles blank subject email
        
 			
@@ -228,7 +232,7 @@ class LogSenderHandler(InboundMailHandler):
 		to=mail_message.sender,
 		subject="Nahi Chamka!",
 		body="Sorry! could'nt understand Chuglimail with *Subject*: %s. You can ALSO use asterisks in your chugli, keep SPACES inbetween,  [BETA Auto-suggestion Feature]: Copy-paste this as your subject: %s                              CHECK http://chugliaunty.appspot.com on how to construct query,              Regards, Aunty"  %(str(mail_message.subject), str("get "+ query['subject']+' '+query['number']+' '+"*"+' '+"*" )),
-		html="Sorry! could'nt understand Chuglimail with <b>Subject</b>: %s. <br><br>You can ALSO use asterisks in your chugli, keep SPACES inbetween, <br><br>[BETA Auto-suggestion Feature]: <b>Copy-paste this as your subject: %s </b> <br><br> CHECK http://chugliaunty.appspot.com on how to construct query, <br><br> Regards, Aunty"  %(str(mail_message.subject), str("get "+ query['subject']+' '+query['number']+' '+"*"+' '+"*" ))
+		html="Sorry! could'nt understand Chuglimail with <b>Subject</b>: %s. <br><br>You can ALSO use asterisks in your chugli, keep SPACES inbetween, <br><br>## BETA Auto-suggestion Feature ##<br> <b>Copy-paste this as your subject: %s </b> <br><br> CHECK http://chugliaunty.appspot.com on how to construct query, <br><br> Regards, Aunty"  %(str(mail_message.subject), str("get "+ query['subject']+' '+query['number']+' '+"*"+' '+"*" ))
 	)
 	
     # When no files are found, mail relevant message.

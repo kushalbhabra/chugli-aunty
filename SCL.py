@@ -70,17 +70,21 @@ def get_paper(Query):
 if __name__ == "__main__":
 	sub = "  get ai688 midsem 08 " 
 	sub_asterisk = " get ai688 midsem *"
-	exp = " get cl 356 "
+	exp = " get cl 356 endsem"
 	non_sense = "123 nasd"
 
 	print "query", sub
 	print preprocessing(sub)
-	
+	print'----------------------------'
+
+
 	print "query-with-asterisk", sub_asterisk
 	print preprocessing(sub_asterisk)
+	print'----------------------------'
 	
 	print "non_sense: ", non_sense
 	print preprocessing(non_sense)
+	print'----------------------------'
 	
 	print "Exp Query:", exp
 	print "Exp feature", preprocessing(exp)
