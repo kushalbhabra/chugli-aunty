@@ -68,15 +68,24 @@ class LogSenderHandler(InboundMailHandler):
 
 			else:
 				logging.info("some chutiya method")
+				mail.send_mail(sender="chugliaunty@gmail.com",
+					to=mail_message.sender,
+					subject="dicendum, quod est sensibile",
+					body= "Didn't understand the subject(of email)? Neither did we... Please type a valid query like: get cl 455 endsem 13  | Why not check chugliaunty.appspot.com to know more?          Regards, Aunty",
+					html= "Didn't understand the subject(of email)? Neither did we...<br><br>Please type a valid query like: <b>get cl 455 endsem 13</b><br><br> Why not check chugliaunty.appspot.com to know more? <br><br>Regards,<br>Aunty")
+		#
 		else:
 			## preprocessing returns False on garbage query
 			self.failed_query(mail_message, self.Query)
 	except:
 		logging.info(" Caught exception, farting it out")
-		self.failed_query(mail_message, self.Query)
+		mail.send_mail(sender="chugliaunty@gmail.com",
+			to=mail_message.sender,
+			subject="dicendum, quod est sensibile",
+			body= "Didn't understand the subject(of email)? Neither did we... Please type a valid query like: get cl 455 endsem 13  | Why not check chugliaunty.appspot.com to know more?          Regards, Aunty",
+			html= "Didn't understand the subject(of email)? Neither did we...<br><br>Please type a valid query like: <b>get cl 455 endsem 13</b><br><br> Why not check chugliaunty.appspot.com to know more? <br><br>Regards,<br>Aunty")
 		# Handles blank subject email
-		pass
-        
+       
 			
     def search(self,query,mail_message):
         self.name = self.construct_name(query)

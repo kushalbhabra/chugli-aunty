@@ -49,16 +49,20 @@ def preprocessing(Subject):
 			Query['number'] = pQuery[2]
 
         else:
-		print "Query Length less than 4"
- 		## Experimental
-		Query['method'] = pQuery[0]
-		Query['subject'] = pQuery[1]
-		Query['number'] = pQuery[2]
-		
-        
-        return Query
+		try:
+			### will be evoked when random query is invoked
+			#### Bad way to handle, but yeah, this works..####
+			print "Query Length less than 4"
+			## Experimental
+			Query['method'] = pQuery[0]
+			Query['subject'] = pQuery[1]
+			Query['number'] = pQuery[2]
+			
+ 		        return Query
 
-
+		except:
+			pass
+	return Query
 # Subject & Number | Exam | Year
 def get_paper(Query):
         pass
@@ -67,12 +71,18 @@ if __name__ == "__main__":
 	sub = "  get ai688 midsem 08 " 
 	sub_asterisk = " get ai688 midsem *"
 	exp = " get cl 356 "
+	non_sense = "123 nasd"
+
 	print "query", sub
 	print preprocessing(sub)
 	
 	print "query-with-asterisk", sub_asterisk
 	print preprocessing(sub_asterisk)
 	
+	print "non_sense: ", non_sense
+	print preprocessing(non_sense)
+	
+	print "Exp Query:", exp
 	print "Exp feature", preprocessing(exp)
 # Easter Eggs
 
