@@ -197,8 +197,8 @@ class LogSenderHandler(InboundMailHandler):
     
     def get_list(self, query, mail_message):
 
-	#Get relevant files by searching datastore using query
-	self.files_list = self.search(query,mail_message)
+	
+	self.files_list = self.lookup = LookUp.all()
 	
         #No files found
 	if self.files_list.count()==0:
@@ -207,17 +207,24 @@ class LogSenderHandler(InboundMailHandler):
 	#One or more files found
         else:
                 plain_body = "I found %d paper(s) \n" % (self.files_list.count())
-
+                html_body = "I found %d paper(s) \n" % (self.files_list.count())
+                html_body += "<br> <table border='1' width='100%'>"
                 #Show details for each file found such as subject,number,exam,year in Message Body.
                 for  self.pdf_file in self.files_list.run():
                         plain_body+= "\n%s \t %s \t %s \t %s"  % (self.pdf_file.Subject,self.pdf_file.Number,self.pdf_file.Exam,self.pdf_file.Year)
                         plain_body+= "\n"
+                        html_body += "<tr> <td> %s </td>  <td> %s </td>  <td> %s </td> <td> %s </td> </tr>"  % (self.pdf_file.Subject,self.pdf_file.Number,self.pdf_file.Exam,self.pdf_file.Year)
+
+                html_body+="</table>"
+
                 
                 plain_body += "\nRegards,\n Aunty"
+                html_body += "\nRegards,\n Aunty"
                 mail.send_mail(sender="chugliaunty@gmail.com",
                                 to=mail_message.sender,
                                 subject=mail_message.subject,
-                                body=plain_body
+                                body=plain_body,
+                               html=html_body
                         ) 
  
         #### PUT the values in EmailDB datastore
