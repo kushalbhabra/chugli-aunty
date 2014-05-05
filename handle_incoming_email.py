@@ -214,11 +214,27 @@ class LogSenderHandler(InboundMailHandler):
                 html_body += "<br><br> <table border='1' width='100%'>"
 
                 html_body += " <tr> <th> Subject </th>  <th> Code </th>  <th> Exam </th> <th> Year </th> </tr> "
+
+                prevSubject = ""
+                background = ['#efeff2','#fefeff']
+                i=0
                 #Show details for each file found such as subject,number,exam,year in Message Body.
                 for  self.pdf_file in self.files_list.run():
+
+                        #For alternate subject highlight
+                        thisSubject = self.pdf_file.Subject+self.pdf_file.Number
+                        if(thisSubject == prevSubject):
+                                bg = background[i]
+                        else:
+                                i=(i+1)%2
+                                bg = background[i]
+                        prevSubject = thisSubject
+                                
+                        
                         plain_body+= "\n%s \t %s \t %s \t %s"  % (self.pdf_file.Subject,self.pdf_file.Number,self.pdf_file.Exam,self.pdf_file.Year)
                         plain_body+= "\n"
-                        html_body += "<tr> <td> %s </td>  <td> %s </td>  <td> %s </td> <td> %s </td> </tr>"  % (self.pdf_file.Subject,self.pdf_file.Number,self.pdf_file.Exam,self.pdf_file.Year)
+                        html_body += "<tr style='background:"+bg+"'>"
+                        html_body += "<td> %s </td>  <td> %s </td>  <td> %s </td> <td> %s </td> </tr>"  % (self.pdf_file.Subject,self.pdf_file.Number,self.pdf_file.Exam,self.pdf_file.Year)
 
                 html_body+="</table>"
 
