@@ -3,7 +3,6 @@ import wsgiref.handlers
 import exceptions
 
 
-
 from google.appengine.ext import db
 from google.appengine.api import mail
 from google.appengine.ext import webapp
@@ -39,6 +38,7 @@ class LogSenderHandler(InboundMailHandler):
             
         #Logging email details in datastore
  	self.email_db = Emaildb()
+
     	try: 
 		self.email_db.subject = mail_message.subject
 		self.email_db.emailer = mail_message.sender
@@ -77,17 +77,16 @@ class LogSenderHandler(InboundMailHandler):
 		else:
 			## preprocessing returns False on garbage query
 			self.failed_query(mail_message, self.Query)
+
+	# To handle dangling references created because of Reckless and Neckless fat-boy Aditya Patil
+	except BlobNotFoundError:
+		self.blob_not_found(mail_message, self.Query)
+		logging.info("Dangling references error, Chutya Aditya ka issue")
+
 	except:
 		logging.info(" Caught exception, farting it out")
 		self.failed_query(mail_message, self.Query)
 		
-		'''
-		mail.send_mail(sender="chugliaunty@gmail.com",
-			to=mail_message.sender,
-			subject="dicendum, quod est sensibile",
-			body= "Didn't understand the subject(of email)? Neither did we... Please type a valid query like: get cl 455 endsem 13  | Why not check chugliaunty.appspot.com to know more?          Regards, Aunty",
-			html= "Didn't understand the subject(of email)? Neither did we...<br><br>Please type a valid query like: <b>get cl 455 endsem 13</b><br><br> Why not check chugliaunty.appspot.com to know more? <br><br>Regards,<br>Aunty")
-		'''
 		# Handles blank subject email
        
 			
@@ -172,7 +171,7 @@ class LogSenderHandler(InboundMailHandler):
                 self.attachedPapers = []
                 for  self.pdf_file in self.files_list.run():
 
-                        logging.info("Got PDF FILE_named " + str(self.pdf_file.FileName))
+			logging.info("Got PDF FILE_named " + str(self.pdf_file.FileName))
                 
                         self.blob_info = blobstore.BlobInfo.get(self.pdf_file.BlobKey.key())
                         self.blob_reader = blobstore.BlobReader(self.pdf_file.BlobKey.key())
@@ -252,7 +251,16 @@ class LogSenderHandler(InboundMailHandler):
     	self.email_db.subject = mail_message.subject
 	self.email_db.emailer = mail_message.sender
 	self.email_db.put()
- 
+    
+    def blob_not_found(self, mail_message, query):
+    	
+	mail.send_mail(sender="chugliaunty@gmail.com",
+		to=[mail_message.sender,'adityafool@gmail.com',]
+		subject="Dangling References!",
+		body="Sorry! Aunty encountered any error, we'll look into this shortly",
+		html="Sorry! Aunty encountered any error, we'll look into this shortly",
+	)
+	
     ## When query parsing fails
     def failed_query(self, mail_message, query):
 

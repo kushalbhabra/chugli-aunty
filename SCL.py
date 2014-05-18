@@ -70,7 +70,7 @@ def get_paper(Query):
 if __name__ == "__main__":
 	sub = "  get ai688 midsem 08 " 
 	sub_asterisk = " get ai688 midsem *"
-	exp = " get cl 356 endsem"
+	exp = " get cl 455 * *"
 	non_sense = "123 nasd"
 
 	print "query", sub
