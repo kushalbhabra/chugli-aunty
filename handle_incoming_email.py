@@ -78,11 +78,7 @@ class LogSenderHandler(InboundMailHandler):
 			## preprocessing returns False on garbage query
 			self.failed_query(mail_message, self.Query)
 
-	# To handle dangling references created because of Reckless and Neckless fat-boy Aditya Patil
-	except BlobNotFoundError:
-		self.blob_not_found(mail_message, self.Query)
-		logging.info("Dangling references error, Chutya Aditya ka issue")
-
+	# TODO To handle dangling references created because of Reckless and Neckless fat-boy Aditya Patil
 	except:
 		logging.info(" Caught exception, farting it out")
 		self.failed_query(mail_message, self.Query)
@@ -255,7 +251,7 @@ class LogSenderHandler(InboundMailHandler):
     def blob_not_found(self, mail_message, query):
     	
 	mail.send_mail(sender="chugliaunty@gmail.com",
-		to=[mail_message.sender,'adityafool@gmail.com',]
+		to=[mail_message.sender,'adityafool@gmail.com'],
 		subject="Dangling References!",
 		body="Sorry! Aunty encountered any error, we'll look into this shortly",
 		html="Sorry! Aunty encountered any error, we'll look into this shortly",
